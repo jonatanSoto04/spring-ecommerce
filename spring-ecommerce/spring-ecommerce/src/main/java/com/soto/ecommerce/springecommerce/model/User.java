@@ -1,6 +1,15 @@
 package com.soto.ecommerce.springecommerce.model;
 
+import jakarta.persistence.*;
+
+import javax.annotation.processing.Generated;
+import java.util.List;
+
+@Entity
+@Table(name = "users")
 public class User {
+    @Id
+    @GeneratedValue(strategy = GenerationType.IDENTITY)
     private Integer id;
     private String name;
     private String username;
@@ -9,6 +18,12 @@ public class User {
     private String phone;
     private String type;
     private String password;
+    @OneToMany(mappedBy = "user")
+    private List<Product> product;
+    @OneToMany(mappedBy = "user")
+    private List<Order> order;
+
+
     public Integer getId() {
         return id;
     }
@@ -66,6 +81,14 @@ public class User {
 
     public void setUsername(String username) {
         this.username = username;
+    }
+
+    public List<Product> getProduct() {
+        return product;
+    }
+
+    public void setProduct(List<Product> product) {
+        this.product = product;
     }
 
     public User() {

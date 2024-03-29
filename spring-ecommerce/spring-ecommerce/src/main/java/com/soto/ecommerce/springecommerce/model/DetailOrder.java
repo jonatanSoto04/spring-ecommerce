@@ -1,11 +1,21 @@
 package com.soto.ecommerce.springecommerce.model;
 
+import jakarta.persistence.*;
+
+@Entity
+@Table(name = "DetailOrders")
 public class DetailOrder {
+    @Id
+    @GeneratedValue(strategy = GenerationType.IDENTITY)
     private Integer id;
     private String name;
     private double amount;
     private double price;
     private double total;
+    @OneToOne
+    private Order order;
+    @ManyToOne
+    private Product product;
 
     public DetailOrder() {
 
@@ -57,6 +67,22 @@ public class DetailOrder {
 
     public void setTotal(double total) {
         this.total = total;
+    }
+
+    public Order getOrder() {
+        return order;
+    }
+
+    public void setOrder(Order order) {
+        this.order = order;
+    }
+
+    public Product getProduct() {
+        return product;
+    }
+
+    public void setProduct(Product product) {
+        this.product = product;
     }
 
     @Override
