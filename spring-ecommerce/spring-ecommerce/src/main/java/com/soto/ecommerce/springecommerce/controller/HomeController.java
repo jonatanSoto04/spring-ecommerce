@@ -22,7 +22,7 @@ public class HomeController {
     @Autowired
     private ProductService productService;
     //Para almacenar los detalles de la orden
-    List<DetailOrder> detail = new ArrayList<DetailOrder>();
+    List<DetailOrder> details = new ArrayList<DetailOrder>();
     //datos de la orden
     Order order = new Order();
     @GetMapping("")
@@ -40,7 +40,7 @@ public class HomeController {
         return "user/producthome";
     }
     @PostMapping("cart")
-    public String addCart(@RequestParam Integer id, @RequestParam Integer amount){
+    public String addCart(@RequestParam Integer id, @RequestParam Integer amount, Model model){
         DetailOrder detailOrder = new DetailOrder();
         Product product = new Product();
         double sumTotal = 0;
@@ -48,7 +48,20 @@ public class HomeController {
         Optional<Product> optionalProduct = productService.get(id);
         log.info("Producto añaido: {}", optionalProduct.get());
         log.info("Cantidad: {}", amount);
+        product=optionalProduct.get();
 
+        detailOrder.setAmount(amount);
+        detailOrder.setPrice(product.getPrice());
+        detailOrder.setName(product.getName());
+        detailOrder.setTotal(product.getPrice()*amount);
+        detailOrder.setProduct(product);
+
+        details.add(detailOrder);
+
+        sumTotal = details.stream().mapToDouble(dt->dt.getTotal()).sum();
+        order.setTotal(sumTotal);
+        model.addAttribute("cart", details);
+        model.addAttribute("order", order);
 
         return "user/trolley";
     }
