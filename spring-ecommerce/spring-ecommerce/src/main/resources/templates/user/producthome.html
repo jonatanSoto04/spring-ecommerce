@@ -9,8 +9,6 @@
   <meta name="author" content="">
 
   <title>Spring eCommerce</title>
-
-
   <!-- Bootstrap core CSS -->
   <link th:href="@{../vendor/bootstrap/css/bootstrap.min.css}" rel="stylesheet">
   <!-- Custom styles for this template -->
@@ -47,7 +45,7 @@
               </a>
             </div>
             <div class="col-lg-6">
-              <form action="carrito.html" method="POST">
+              <form th:action="@{/cart}" method="POST">
                 <h2 class="card-title" th:text="${product.name}"></h2>
 
                 <ul class="list-group">
