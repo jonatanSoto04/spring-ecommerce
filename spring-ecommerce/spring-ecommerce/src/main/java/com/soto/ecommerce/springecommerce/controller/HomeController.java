@@ -100,6 +100,8 @@ public class HomeController {
 
     @GetMapping("/getCart")
     public String getCart(Model model){
+        double sumTotal = 0;
+        order.setTotal(sumTotal);
         model.addAttribute("cart", details);
         model.addAttribute("order", order);
         return "/user/trolley";
@@ -108,7 +110,8 @@ public class HomeController {
     @GetMapping("/order")
     public String order(Model model){
         User user = userService.findById(1).get();
-
+        double sumTotal = 0;
+        order.setTotal(sumTotal);
         model.addAttribute("cart", details);
         model.addAttribute("order", order);
         model.addAttribute("user", user);
