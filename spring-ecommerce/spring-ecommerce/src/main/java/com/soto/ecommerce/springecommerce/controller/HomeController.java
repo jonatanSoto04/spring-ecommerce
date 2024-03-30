@@ -101,4 +101,9 @@ public class HomeController {
         return "/user/trolley";
     }
 
+    @GetMapping("/order")
+    public String order(){
+        return "user/ordersummary";
+    }
+
 }
