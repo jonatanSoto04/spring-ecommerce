@@ -1,5 +1,5 @@
 <!DOCTYPE html>
-<html lang="es">
+<html lang="es" xmlns:th="http://www.w3.org/1999/xhtml">
 
 <head>
 
@@ -12,42 +12,16 @@
 
 
   <!-- Bootstrap core CSS -->
-  <link href="vendor/bootstrap/css/bootstrap.min.css" rel="stylesheet">
-
+  <link th:href="@{../vendor/bootstrap/css/bootstrap.min.css}" rel="stylesheet">
   <!-- Custom styles for this template -->
-  <link href="css/heroic-features.css" rel="stylesheet">
+  <link th:href="@{../css/heroic-features.css}" rel="stylesheet">
 
 </head>
 
 <body>
 
   <!-- Navigation -->
-  <nav class="navbar navbar-expand-lg navbar-dark bg-dark fixed-top">
-    <div class="container">
-      <a class="navbar-brand" href="#">Spring eCommerce</a>
-
-      <form class="form-inline my-2 my-lg-0" method="post"
-      action="#">
-      <input class="form-control mr-sm-2" type="search"
-      placeholder="Buscar" aria-label="Search" name="nombre"
-      autocomplete="off">
-      <button class="btn btn-outline-success my-2 my-sm-0" type="submit">Buscar</button>
-    </form>
-
-
-    <button class="navbar-toggler" type="button" data-toggle="collapse" data-target="#navbarResponsive" aria-controls="navbarResponsive" aria-expanded="false" aria-label="Toggle navigation">
-      <span class="navbar-toggler-icon"></span>
-    </button>
-    <div class="collapse navbar-collapse" id="navbarResponsive">
-      <ul class="navbar-nav ml-auto">
-        <li class="nav-item"><a class="nav-link"
-          href="carrito.html">Carrito</a></li>
-          <li class="nav-item"><a class="nav-link"
-            href="login.html">Login</a></li>
-          </ul>
-        </div>
-      </div>
-    </nav>
+  <div th:include="user/template_user::header"></div>
 
     <!-- Page Content -->
     <div class="container">
@@ -59,7 +33,7 @@
       </h1>
 
       <ol class="breadcrumb">
-        <li class="breadcrumb-item"><a href="index.html">Home</a></li>
+        <li class="breadcrumb-item"><a th:href="@{/}">Home</a></li>
         <li class="breadcrumb-item active">Producto</li>
       </ol>
 
@@ -69,17 +43,17 @@
           <div class="row">
             <div class="col-lg-6">
               <a href="#"> <img class="img-fluid rounded"
-                src="http://placehold.it/500x325"  alt="">
+                th:src="@{/images/{img} (img=${product.image})}"  alt="">
               </a>
             </div>
             <div class="col-lg-6">
               <form action="carrito.html" method="POST">
-                <h2 class="card-title">Nombre producto</h2>
+                <h2 class="card-title" th:text="${product.name}"></h2>
 
                 <ul class="list-group">
-                  <li class="list-group-item"><h5>Precio: </h5></li>
+                  <li class="list-group-item" th:text=" 'Precio: ' + ${product.price}"><h5></h5></li>
                   <li class="list-group-item">
-                    <p>Descripción:</p>
+                    <p th:text=" 'Descripcion: ' + ${product.description}"></p>
                   </li>
                   <li class="list-group-item"><h6>
                     Cantidad: <input type="number" id="cantidad" name="cantidad" autocomplete="off"
@@ -101,16 +75,11 @@
     <!-- /.container -->
 
     <!-- Footer -->
-    <footer class="py-5 bg-dark">
-      <div class="container">
-        <p class="m-0 text-center text-white">Copyright &copy; Spring eCommerce 2020</p>
-      </div>
-      <!-- /.container -->
-    </footer>
+    <div th:include="user/template_user::footer"></div>
 
     <!-- Bootstrap core JavaScript -->
-    <script src="vendor/jquery/jquery.min.js"></script>
-    <script src="vendor/bootstrap/js/bootstrap.bundle.min.js"></script>
+    <script th:src="@{../vendor/jquery/jquery.min.js}"></script>
+    <script th:src="@{../vendor/bootstrap/js/bootstrap.bundle.min.js}"></script>
 
   </body>
 
