@@ -19,12 +19,20 @@ public class Product {
     }
 
     public Product(Integer id, String name, String description, String image, double price, int amount, User user) {
+        super();
         this.id = id;
         this.name = name;
         this.description = description;
         this.image = image;
         this.price = price;
         this.amount = amount;
+        this.user = user;
+    }
+    public User getUser() {
+        return user;
+    }
+
+    public void setUser(User user) {
         this.user = user;
     }
 
@@ -74,14 +82,6 @@ public class Product {
 
     public void setAmount(int amount) {
         this.amount = amount;
-    }
-
-    public User getUser() {
-        return user;
-    }
-
-    public void setUser(User user) {
-        this.user = user;
     }
 
     @Override
