@@ -4,6 +4,8 @@ import com.soto.ecommerce.springecommerce.model.DetailOrder;
 import com.soto.ecommerce.springecommerce.model.Order;
 import com.soto.ecommerce.springecommerce.model.Product;
 import com.soto.ecommerce.springecommerce.model.User;
+import com.soto.ecommerce.springecommerce.service.IDetailOrderService;
+import com.soto.ecommerce.springecommerce.service.IOrderService;
 import com.soto.ecommerce.springecommerce.service.IUserService;
 import com.soto.ecommerce.springecommerce.service.ProductService;
 import org.slf4j.Logger;
@@ -14,6 +16,7 @@ import org.springframework.ui.Model;
 import org.springframework.web.bind.annotation.*;
 
 import java.util.ArrayList;
+import java.util.Date;
 import java.util.List;
 import java.util.Optional;
 
@@ -25,6 +28,12 @@ public class HomeController {
     private ProductService productService;
     @Autowired
     private IUserService userService;
+
+    @Autowired
+    private IOrderService orderService;
+    @Autowired
+    private IDetailOrderService detailOrderService;
+
     //Para almacenar los detalles de la orden
     List<DetailOrder> details = new ArrayList<DetailOrder>();
     //datos de la orden
@@ -110,12 +119,32 @@ public class HomeController {
     @GetMapping("/order")
     public String order(Model model){
         User user = userService.findById(1).get();
-        double sumTotal = 0;
-        order.setTotal(sumTotal);
         model.addAttribute("cart", details);
         model.addAttribute("order", order);
         model.addAttribute("user", user);
         return "user/ordersummary";
     }
+    //Guardar la orden
+    @GetMapping("/saveOrder")
+    public String saveOrder(){
+        Date creationDate = new Date();
+        order.setFechaCreacion(creationDate);
+        order.setNumber(orderService.generarteNumberOrder());
 
+        //User
+        User user = userService.findById(1).get();
+        order.setUser(user);
+        orderService.save(order);
+
+        //Guardar detalles
+        for(DetailOrder dt: details){
+            dt.setOrder(order);
+            detailOrderService.save(dt);
+        }
+
+        ///Limpiar listar y orden
+        order = new Order();
+        details.clear();
+        return "redirect:/";
+    }
 }

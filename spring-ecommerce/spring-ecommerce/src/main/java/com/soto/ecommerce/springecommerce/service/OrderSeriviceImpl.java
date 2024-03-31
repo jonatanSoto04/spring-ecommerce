@@ -22,7 +22,7 @@ public class OrderSeriviceImpl implements  IOrderService{
         return orderRepository.findAll();
     }
 
-    public String genererNumberOrder(){
+    public String generarteNumberOrder(){
         int number = 0;
         String numberConcatenated = "";
         List<Order> orders = findAll();
