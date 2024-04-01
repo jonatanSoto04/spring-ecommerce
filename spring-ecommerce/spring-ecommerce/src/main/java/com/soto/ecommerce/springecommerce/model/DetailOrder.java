@@ -3,7 +3,7 @@ package com.soto.ecommerce.springecommerce.model;
 import jakarta.persistence.*;
 
 @Entity
-@Table(name = "DetailOrders")
+@Table(name = "detailOrders")
 public class DetailOrder {
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
@@ -18,7 +18,6 @@ public class DetailOrder {
     private Product product;
 
     public DetailOrder() {
-
     }
 
     public DetailOrder(Integer id, String name, double amount, double price, double total) {

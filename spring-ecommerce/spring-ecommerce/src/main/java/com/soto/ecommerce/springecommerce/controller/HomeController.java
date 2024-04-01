@@ -8,6 +8,7 @@ import com.soto.ecommerce.springecommerce.service.IDetailOrderService;
 import com.soto.ecommerce.springecommerce.service.IOrderService;
 import com.soto.ecommerce.springecommerce.service.IUserService;
 import com.soto.ecommerce.springecommerce.service.ProductService;
+import jakarta.servlet.http.HttpSession;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -40,7 +41,8 @@ public class HomeController {
     //datos de la orden
     Order order = new Order();
     @GetMapping("")
-    public String home(Model model){
+    public String home(Model model, HttpSession session){
+        log.info("Sesion del usuario: {}", session.getAttribute("iduser"));
         model.addAttribute("products", productService.findAll());
         return "user/home";
     }
@@ -71,18 +73,18 @@ public class HomeController {
         detailOrder.setProduct(product);
 
         //Validaciono para que el producto no se añada dos veces
-        Integer idPrduct = product.getId();
-        boolean joined = details.stream().anyMatch(p -> p.getProduct().getId() == idPrduct);
+        Integer idProduct = product.getId();
+        boolean joined = details.stream().anyMatch(p -> p.getProduct().getId() == idProduct);
 
         if(!joined){
             details.add(detailOrder);
         }
 
-        sumTotal = details.stream().mapToDouble(dt->dt.getTotal()).sum();
+        sumTotal = details.stream().mapToDouble(dt -> dt.getTotal()).sum();
         order.setTotal(sumTotal);
         model.addAttribute("cart", details);
         model.addAttribute("order", order);
-
+        log.info("Lista de detalles: ",details);
         return "user/trolley";
     }
 
@@ -110,37 +112,47 @@ public class HomeController {
 
     @GetMapping("/getCart")
     public String getCart(Model model){
-        double sumTotal = 0;
-        order.setTotal(sumTotal);
         model.addAttribute("cart", details);
         model.addAttribute("order", order);
+
+
         return "/user/trolley";
     }
 
     @GetMapping("/order")
-    public String order(Model model){
-        User user = userService.findById(1).get();
+    public String order(Model model, HttpSession session){
+        User user = userService.findById( Integer.parseInt(session.getAttribute(("iduser")).toString())).get();
+
         model.addAttribute("cart", details);
         model.addAttribute("order", order);
         model.addAttribute("user", user);
+
+
         return "user/ordersummary";
     }
     //Guardar la orden
     @GetMapping("/saveOrder")
-    public String saveOrder(){
+    public String saveOrder(HttpSession session){
+
         Date creationDate = new Date();
         order.setFechaCreacion(creationDate);
         order.setNumber(orderService.generarteNumberOrder());
 
         //User
-        User user = userService.findById(1).get();
+        User user = userService.findById(Integer.parseInt(session.getAttribute(("iduser")).toString())).get();
+
         order.setUser(user);
         orderService.save(order);
-
+        for (DetailOrder detail : details) {
+            log.info(detail.getId() + " este es el producto" + detail.toString());
+        }
         //Guardar detalles
-        for(DetailOrder dt: details){
+        for(DetailOrder dt:details){
+            log.info(dt.getId() + " este es el producto" + dt.toString());
             dt.setOrder(order);
+            log.info(dt.getId() + " este es el producto" + dt.toString());
             detailOrderService.save(dt);
+            log.info(dt.getId() + " este es el producto" + dt.toString());
         }
 
         ///Limpiar listar y orden
